@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown to April 4, 12:20 PM</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .countdown-wrapper {
+    position: relative;
+    text-align: center;
+  }
+  #countdown {
+    font-size: 48px;
+    color: white;
+  }
+  #countdown-text {
+    font-size: 60px;
+    color: white;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+  .circle {
+    width: 600px;
+    height: 300px;
+    background-color: red;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+</style>
+</head>
+<body>
+<div class="countdown-wrapper">
+  <div id="countdown-text">Your slap will happen in:</div>
+  <div class="circle">
+    <div id="countdown"></div>
+    <canvas id="fireworks"></canvas>
+  </div>
+</div>
+
+<script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("April 4, 2024 12:45:00").getTime();
+
+  // Update the countdown every second
+  var x = setInterval(function() {
+
+    // Get the current date and time
+    var now = new Date().getTime();
+
+    // Calculate the distance between now and the countdown date
+    var distance = countDownDate - now;
+
+    // Calculate time units
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Display the countdown
+    document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+
+    // If the countdown is finished, display fireworks
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("countdown").innerHTML = "its time";
+      fireworks();
+    }
+  }, 1000);
+
+  // Fireworks function
+  function fireworks() {
+    var canvas = document.getElementById('fireworks');
+    var ctx = canvas.getContext('2d');
+
+    canvas.width = 300;
+    canvas.height = 300;
+
+    var colors = ['#ff0000', '#0000ff', '#00ff00'];
+
+    function randomColor(colors) {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createParticle(x, y, color) {
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function loop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (var i = 0; i < 50; i++) {
+        var x = Math.random() * canvas.width;
+        var y = Math.random() * canvas.height;
+        var color = randomColor(colors);
+        createParticle(x, y, color);
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    loop();
+  }
+</script>
+</body>
+</html>
